@@ -5,6 +5,7 @@ from auctions import validate_and_print_auction
 
 API_URL = "https://api.hypixel.net/skyblock/auctions"
 MOST_RECENT_PAGES = 2
+session = requests.Session()
 
 
 def run():
@@ -17,6 +18,7 @@ def run():
 
     # Fetch all pages of auctions
     fetch_pages(total_pages_count)
+    
     while True:
         # Fetch most recent pages of auctions
         fetch_pages(MOST_RECENT_PAGES)
@@ -45,10 +47,10 @@ def fetch_pages(page_count):
 
 def fetch_url(url):
     try:
-        response = requests.get(url)
+        response = session.get(url)
         return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f'Erro na requisição para {url}: {e}')
+    except requests.exceptions.RequestException:
+        print(f"An error occurred while fetching the URL: {url}")
         return None
 
 run()
