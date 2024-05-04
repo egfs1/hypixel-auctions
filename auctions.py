@@ -2,7 +2,7 @@ import pyperclip
 import winsound
 import time
 import locale
-from items import items, Tier
+from items import items, Tier, get_color_code
 
 AUCTIONS_SHOWED = []
 CONSOLE_DEFAULT_COLOR = "\033[0m"
@@ -24,7 +24,7 @@ def validate_and_print_auction(auction):
         if not has_required_enchantments(item, auction):
             continue
 
-        print_auction(auction, item.get_color_code())
+        print_auction(auction, get_color_code(Tier[auction["tier"]]))
 
 
 def is_already_showed(auction):
@@ -54,7 +54,7 @@ def check_item_attribute(item_attr, auction_attr, lock_attr):
         if item_attr != auction_attr:
             return False
     else:
-        if item_attr >= auction_attr:
+        if item_attr > auction_attr:
             return False
     return True
 
@@ -64,6 +64,7 @@ def has_required_enchantments(item, auction):
 
 
 def print_auction(auction, color_code):
+    print(color_code)
     print(color_code + auction["item_name"])
     print(auction["tier"] + CONSOLE_DEFAULT_COLOR)
     print(locale.format_string("%d", auction["starting_bid"], grouping=True))
