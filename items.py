@@ -2,14 +2,16 @@ from enum import Enum
 
 
 class Item:
-    def __init__(self, name, stars, tier, price, enchantments=[], lock_stars=False, lock_tier=False):
+    def __init__(self, name, tier, price, stars=0, enchantments=[], level=0, lock_stars=False, lock_tier=False, lock_level=False):
         self.name = name
         self.stars = stars
         self.tier = tier
         self.price = price
         self.enchantments = enchantments
+        self.level = level
         self.lock_stars = lock_stars
         self.lock_tier = lock_tier
+        self.lock_level = lock_level
 
 
 class Tier(Enum):
@@ -50,6 +52,6 @@ def get_color_code(tier):
 
 
 items = [
-    Item(name = "Ancient Shadow Assassin Leggings", stars = 4, tier = Tier.LEGENDARY, price = 4500000),
-    Item(name = "Necrotic Wise Dragon Leg", stars = 0, tier = Tier.LEGENDARY, price = 1600000),
+    Item(name = "Ancient Shadow Assassin Chestplate", stars = 5, tier = Tier.MYTHIC, price = 20000000, enchantments=["Last Stand V"]),
+    Item(name = "Baby Yeti", level=90, tier = Tier.LEGENDARY, price = 30000000),
 ]
