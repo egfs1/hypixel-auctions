@@ -1,10 +1,8 @@
 import requests
 import concurrent.futures
 from auctions import validate_and_print_auction
+from utils import API_URL, MOST_RECENT_PAGES
 
-
-API_URL = "https://api.hypixel.net/v2/skyblock/auctions"
-MOST_RECENT_PAGES = 2
 session = requests.Session()
 
 def run():
@@ -25,20 +23,24 @@ def run():
 
 def fetch_pages(page_count):
     try:
+        # Create a list of URLs to fetch
         urls = []
         for i in range(page_count):
             urls.append(f'{API_URL}?page={i}')
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=50) as fetch_executor, concurrent.futures.ThreadPoolExecutor(max_workers=50) as process_executor:
+            # Fetch all URLs concurrently
             fetch_futures = [fetch_executor.submit(fetch_url, url) for url in urls]
             process_futures = []
-
+            
+            # Process fetched auctions concurrently
             for future in concurrent.futures.as_completed(fetch_futures):
                 result = future.result()
                 if result is not None and result["success"]:
                     for auction in result["auctions"]:
                         process_futures.append(process_executor.submit(validate_and_print_auction, auction))
 
+            # Wait for all auctions to be processed
             for future in concurrent.futures.as_completed(process_futures):
                 future.result()
 

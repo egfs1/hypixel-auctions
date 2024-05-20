@@ -2,13 +2,13 @@ import pyperclip
 import winsound
 import time
 import locale
-from items import items, Tier, get_color_code
+import threading
+from items import items
+from tier import Tier, get_tier_color
+from utils import CONSOLE_DEFAULT_COLOR, STAR_CHAR, VALIDATED_AUCTIONS
 
-VALIDATED_AUCTIONS = set()
-CONSOLE_DEFAULT_COLOR = "\033[0m"
-STAR_CHAR = "✪"
-locale.setlocale(locale.LC_ALL, 'de_DE')
-
+locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+console_lock = threading.Lock()
 
 def validate_and_print_auction(auction):
     if not auction["bin"] or auction["claimed"] or is_already_validated(auction):
@@ -25,8 +25,9 @@ def validate_and_print_auction(auction):
 
         if not has_required_enchantments(item, auction):
             continue
-
-        print_auction(auction, get_color_code(Tier[auction["tier"]]))
+        
+        with console_lock:
+            print_auction(auction, get_tier_color(auction["tier"]))
 
 
 def is_already_validated(auction):

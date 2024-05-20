@@ -57,7 +57,7 @@ python main.py
 - `lock_level`: Blocks the script to retrieve an item with higher `level` than provided. (`False` by default)
 
 ```py
-# items.py at line 54
+# items.py at line 16
 items = [
     Item(name="Baby Yeti", price=30000000, tier=Tier.LEGENDARY, level=90),
 ]
